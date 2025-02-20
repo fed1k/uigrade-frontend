@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import S3UploadAndRetrieve from '../components/Upload'
+// import S3UploadAndRetrieve from '../components/Upload'
 function Home() {
   return (
     <div className='max-w-[794px]  mx-auto bg-white my-5 py-5 rounded-[24px] flex items-center gap-3 pt-[140px] md:pt-[240px] flex-col px-5 md:px-[102px] pb-[20px] md:pb-[318px] justify-center'>
