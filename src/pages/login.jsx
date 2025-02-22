@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const LoginPage = () => {
     const [file1, setFile1] = useState()
@@ -20,7 +21,7 @@ const LoginPage = () => {
         // console.log(formData, others)
         formData.append("question_text", others.question_text)
         formData.append("level", others.level)
-        fetch("http://localhost:5000/api/questions", {
+        fetch(apiUrl + "/questions", {
             method: "POST",
             body: formData,
         }).then((res) => res.json()).then((res) => console.log(res))
