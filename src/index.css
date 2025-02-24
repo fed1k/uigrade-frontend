@@ -6,3 +6,7 @@
 .text-Inter{
     font-family: 'Inter', serif;
 }
+
+label {
+    height: 300px !important;
+}

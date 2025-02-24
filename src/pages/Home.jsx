@@ -9,10 +9,11 @@ function Home() {
       <div className='max-w-[590px]'>
         <p className='text-Inter font-bold leading-[48px] md:leading-[64px] text-[48px] lg:text-[64px] mb-5 md:mb-6 text-center text-[#222222]'>Узнай свой <br />  уровень <br /> в  UI дизайне</p>
         <p className='text-Inter font-medium text-[20px] text-center mb-[106px] md:mb-10 leading-5 text-[#C8C8C8]'>Пройди тест из 3 уровней сложности <br /> и  получи грейд с оценкой</p>
-        <Link to={'/work'}>
-          <button className='p-2.5 rounded-[16px] min-h-[56px] min-w-[295px] md:min-w-[346px] text-center bg-[#222222] text-white'>Начать</button>
-        </Link>
-        <button onClick={() => navigate("/login")} className='p-2.5 mt-2 rounded-[16px] min-h-[56px] min-w-[295px] md:min-w-[346px] text-center bg-[#222222] text-white'>Админ</button>
+        <div className='flex flex-col'>
+
+          <button onClick={() => navigate("/work")} className='p-2.5 rounded-[16px] min-h-[56px] text-center bg-[#222222] text-white'>Начать</button>
+          <button onClick={() => navigate("/login")} className='p-2.5 mt-2 rounded-[16px] min-h-[56px]   text-center bg-[#222222] text-white'>Админ</button>
+        </div>
       </div>
     </div>
   )
