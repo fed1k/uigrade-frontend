@@ -25,9 +25,16 @@ function Work() {
     }
     setPickedIndex(index);
   };
+  
   const showCorrectAnswer = () => {
     setIsCorrect("correct");
+    if (correctAnswer === currentQuestion?.image1) {
+      setPickedIndex(0);
+    } else if (correctAnswer === currentQuestion?.image2) {
+      setPickedIndex(1);
+    }
   };
+  
 
   const handleNextQuestion = () => {
     if (number < questions.length) {
