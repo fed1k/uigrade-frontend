@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from './layout/Mainlayout';
 import {Home,Work,Answer,Middle} from './pages/index'
