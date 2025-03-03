@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { useNavigate } from "react-router-dom";
+import Select from "../components/Select";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const AdminPage = () => {
     const [file1, setFile1] = useState()
     const [file2, setFile2] = useState()
     const [others, setOthers] = useState({ question_text: "", level: "" })
+
+    const [levels, setLevels] = useState([])
+
+    const [activeTab, setActiveTab] = useState(0);
 
 
     const navigate = useNavigate()
@@ -44,45 +49,62 @@ const AdminPage = () => {
     }, [])
 
     return (
-        <form className="flex flex-col gap-3 items-center" onSubmit={upload}  >
-            <input className="px-2 py-0.5" onChange={handleOtherInputsChange} type="text" name="question_text" placeholder="Question" />
-            <input className="px-2 py-0.5" onChange={handleOtherInputsChange} type="text" name="level" placeholder="Level" />
-            <div>
+        <>
+            <nav className="flex justify-center space-x-4">
+                <p className={`border-b cursor-pointer ${activeTab === 0 ? "border-b-gray-700" : "border-b-transparent"}`} onClick={() => setActiveTab(0)}>Добавить вопрос</p>
+                <p className={`border-b cursor-pointer ${activeTab === 1 ? "border-b-gray-700" : "border-b-transparent"}`} onClick={() => setActiveTab(1)}>Управление</p>
+            </nav>
+            {
 
-                <div className="flex gap-4">
-                    <p className="flex-1 pl-10 pb-6">✔</p>
-                    <p className="flex-1">❌</p>
-                </div>
-                <div className="flex gap-4">
+                activeTab === 0 ?
+                    <form className="flex flex-col gap-3 items-center" onSubmit={upload}  >
+                        <div className="flex gap-4 mt-6">
 
-                    <div>
+                            <input className="px-2 py-0.5" onChange={handleOtherInputsChange} type="text" name="question_text" placeholder="Question" />
+                            <Select placeholder="Level">
+                                {levels.length ? levels.map((level) => (
+                                    <p>{level}</p>
+                                )) : <p className="text-sm text-gray-400">Уровен сложность нет</p>}
+                            </Select>
+                        </div>
+                        <div>
 
-                        <FileUploader
-                            handleChange={handleChange1}
-                            name="file"
-                            types={["jpg", "jpeg", "png", "webp"]}
-                            label={"Upload or drop a image right here"}
-                            required
+                            <div className="flex gap-4">
+                                <p className="flex-1 pl-10 pb-6">✔</p>
+                                <p className="flex-1">❌</p>
+                            </div>
+                            <div className="flex gap-4">
 
-                            classes="h-full"
-                            fileOrFiles={file1}
-                        />
-                    </div>
-                    <div>
+                                <div>
 
-                        <FileUploader
-                            handleChange={handleChange2}
-                            name="file"
-                            types={["jpg", "jpeg", "png", "webp"]}
-                            label={"Upload or drop a image right here"}
-                            required
-                            fileOrFiles={file2}
-                        />
-                    </div>
-                </div>
-            </div>
-            <button className="border px-6 py-0.5 rounded">Upload</button>
-        </form>
+                                    <FileUploader
+                                        handleChange={handleChange1}
+                                        name="file"
+                                        types={["jpg", "jpeg", "png", "webp"]}
+                                        label={"Upload or drop a image right here"}
+                                        required
+
+                                        classes="h-full"
+                                        fileOrFiles={file1}
+                                    />
+                                </div>
+                                <div>
+
+                                    <FileUploader
+                                        handleChange={handleChange2}
+                                        name="file"
+                                        types={["jpg", "jpeg", "png", "webp"]}
+                                        label={"Upload or drop a image right here"}
+                                        required
+                                        fileOrFiles={file2}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <button className="border px-6 py-0.5 rounded">Upload</button>
+                    </form>
+                    : <></>}
+        </>
     )
 }
 

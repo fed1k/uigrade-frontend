@@ -1,12 +1,15 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 function Mainlayout() {
+
+  const route = useLocation()
+
   return (
     <div className='px-5 min-h-screen py-5 pb-12 bg-[#F4F4F4]'>
-      <header>
+      {route.pathname !== "/admin" ? <header>
         <Navbar/>
-      </header>
+      </header> : <></>}
       <main>
         <Outlet/>
       </main>
