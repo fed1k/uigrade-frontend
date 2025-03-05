@@ -18,3 +18,81 @@ export const checkAnswer = async (answer) => {
     const data = await response.json();
     return data
 }
+
+export const fetchLevels = async () => {
+    const url = BASE_API_URL + "/hardness";
+    const response = await fetch(url)
+    const data = await response.json();
+
+    return data
+}
+
+export const addHardness = async (data) => {
+    const url = BASE_API_URL + "/hardness"
+    const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+
+    return response.json()
+}
+
+export const deleteHardness = async (id) => {
+    const url = BASE_API_URL + "/hardness";
+    const response = await fetch(url, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+    return response.json();
+}
+
+export const deleteQuestion = async (id) => {
+    const url = BASE_API_URL + "/questions";
+    const response = await fetch(url, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+    return response.json();
+}
+
+export const getGrades = async () => {
+    const url = BASE_API_URL + "/grade";
+    const response = await fetch(url);
+
+    return response.json();
+}
+
+export const addGrade = async (data) => {
+    const url = BASE_API_URL + "/grade";
+    const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+
+    return response.json();
+}
+
+export const deleteGrade = async(data) => {
+    const url = BASE_API_URL + "/grade";
+    const response = await fetch(url, {
+        method: "DELETE",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+
+    return response.json();
+}

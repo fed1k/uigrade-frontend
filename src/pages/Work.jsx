@@ -47,6 +47,7 @@ function Work() {
       setCorrectAnswer("");
     } else {
       navigate("/middle");
+      sessionStorage.removeItem("currentQuestion")
     }
   };
 
@@ -61,6 +62,7 @@ function Work() {
   useEffect(() => {
     if (questions.length > 0) {
       setProgress((number / questions.length) * 100);
+      setLevel(currentQuestion.level)
     }
   }, [number, questions]);
 
