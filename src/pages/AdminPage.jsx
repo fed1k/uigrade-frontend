@@ -5,6 +5,7 @@ import Select from "../components/Select";
 import { fetchLevels } from "../services/services";
 import { ToastContainer, toast } from "react-toastify";
 import ControlTab from "../components/AdminControlTab";
+import AdminStatisticsTab from "../components/AdminStatisticsTab";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const AdminPage = () => {
@@ -70,6 +71,7 @@ const AdminPage = () => {
                 <p className={`border-b cursor-pointer ${activeTab === 0 ? "border-b-gray-700" : "border-b-transparent"}`} onClick={() => setActiveTab(0)}>Добавить вопрос</p>
                 <p className={`border-b cursor-pointer ${activeTab === 1 ? "border-b-gray-700" : "border-b-transparent"}`} onClick={() => setActiveTab(1)}>Управление</p>
                 <p className={`border-b cursor-pointer ${activeTab === 2 ? "border-b-gray-700" : "border-b-transparent"}`} onClick={() => setActiveTab(2)}>Статистика</p>
+                <p className={`border-b cursor-pointer ${activeTab === 3 ? "border-b-gray-700" : "border-b-transparent"}`} onClick={() => setActiveTab(3)}>Резултаты</p>
             </nav>
             <ToastContainer />
             {
@@ -124,6 +126,8 @@ const AdminPage = () => {
                 </form>}
 
             {activeTab === 1 && <ControlTab levels={levels} setLevels={setLevels} />}
+
+            {activeTab === 2 && <AdminStatisticsTab />}
         </>
     )
 }

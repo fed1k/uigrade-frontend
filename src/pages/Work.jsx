@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkAnswer, fetchQuestions } from '../services/services';
 import CorrectOrWrong from '../components/CorrectOrWrong';
+
+const BASE_API_URL = import.meta.env.VITE_API_URL
+
+
 function Work() {
-  const storedNumber = parseInt(sessionStorage.getItem("currentQuestion")) || 1; 
+  const storedNumber = parseInt(sessionStorage.getItem("currentQuestion")) || 1;
   const [number, setNumber] = useState(storedNumber);
   const [progress, setProgress] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState();
@@ -13,19 +17,20 @@ function Work() {
   const [pickedIndex, setPickedIndex] = useState("default");
   const [correctAnswer, setCorrectAnswer] = useState("");
   const navigate = useNavigate();
-  const [corrects,setCorrects]=useState(0)
+  const [corrects, setCorrects] = useState(0)
+
   const handleNext = async (option, index) => {
-    const result = await checkAnswer(JSON.stringify({ question_id: currentQuestion.id, answer: option }));
+    const result = await checkAnswer(JSON.stringify({ question_id: currentQuestion.id, answer: option, result_id: +sessionStorage.getItem("result_id") }));
     if (result.correct) {
       setIsCorrect("correct");
-      setCorrects(corrects+1)
+      setCorrects(corrects + 1)
     } else {
       setIsCorrect(result.correct_one);
       setCorrectAnswer(result.correct_one);
     }
     setPickedIndex(index);
   };
-  
+
   const showCorrectAnswer = () => {
     setIsCorrect("correct");
     if (correctAnswer === currentQuestion?.image1) {
@@ -34,7 +39,7 @@ function Work() {
       setPickedIndex(1);
     }
   };
-  
+
 
   const handleNextQuestion = () => {
     if (number < questions.length) {
@@ -46,6 +51,7 @@ function Work() {
       setIsCorrect("");
       setCorrectAnswer("");
     } else {
+      
       navigate("/middle");
       sessionStorage.removeItem("currentQuestion")
     }
@@ -65,6 +71,23 @@ function Work() {
       setLevel(currentQuestion.level)
     }
   }, [number, questions]);
+
+  // Track incomplete quiz
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (questions.length !== number) {
+
+        const payload = JSON.stringify({ result_id: sessionStorage.getItem("result_id") });
+        navigator.sendBeacon(BASE_API_URL + '/mark-incomplete', payload);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+
+  }, []);
 
   return (
     <div className='max-w-[794px] mx-auto bg-white my-5 p-5 py-5 rounded-[24px] flex items-center gap-3 justify-center flex-col'>
@@ -114,10 +137,10 @@ function Work() {
               Правилний
             </button>
           ) : null}
-          {(questions.length===number) && <button onClick={handleNextQuestion} className='p-2.5 rounded-[16px] flex-1 min-h-[56px] text-center bg-[#222222] text-white'>
-          разрешить
+          {(questions.length === number) && <button onClick={handleNextQuestion} className='p-2.5 rounded-[16px] flex-1 min-h-[56px] text-center bg-[#222222] text-white'>
+            разрешить
           </button>}
-          {!(questions.length===number) && <button onClick={handleNextQuestion} className='p-2.5 rounded-[16px] flex-1 min-h-[56px] text-center bg-[#222222] text-white'>
+          {!(questions.length === number) && <button onClick={handleNextQuestion} className='p-2.5 rounded-[16px] flex-1 min-h-[56px] text-center bg-[#222222] text-white'>
             Следюший
           </button>}
         </div>

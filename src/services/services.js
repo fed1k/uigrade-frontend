@@ -96,3 +96,39 @@ export const deleteGrade = async(data) => {
 
     return response.json();
 }
+
+export const getStats = async() => {
+    const url = BASE_API_URL + "/stats";
+    const response = await fetch(url);
+    const data= await response.json();
+
+    return data
+}
+
+export const incrementTgVisitCount = async () => {
+    const url = BASE_API_URL + "/tg_visit";
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+    return response.json()
+}
+
+export const initResult = async() => {
+    const url = BASE_API_URL + "/result";
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+    return response.json()
+}
+
+export const getResult = async(result_id) => {
+    const url = BASE_API_URL + `/result/${result_id}`;
+    const response = await fetch(url);
+    return response.json();
+}
