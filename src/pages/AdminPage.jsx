@@ -6,6 +6,7 @@ import { fetchLevels } from "../services/services";
 import { ToastContainer, toast } from "react-toastify";
 import ControlTab from "../components/AdminControlTab";
 import AdminStatisticsTab from "../components/AdminStatisticsTab";
+import AdminResultsTab from "../components/AdminResultsTab";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const AdminPage = () => {
@@ -128,6 +129,8 @@ const AdminPage = () => {
             {activeTab === 1 && <ControlTab levels={levels} setLevels={setLevels} />}
 
             {activeTab === 2 && <AdminStatisticsTab />}
+
+            {activeTab === 3 && <AdminResultsTab />}
         </>
     )
 }

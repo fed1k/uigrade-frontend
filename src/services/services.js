@@ -132,3 +132,9 @@ export const getResult = async(result_id) => {
     const response = await fetch(url);
     return response.json();
 }
+
+export const getResults = async() => {
+    const url = BASE_API_URL + "/result";
+    const response = await fetch(url);
+    return response.json()
+}
