@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Skeleton } from "../components/ui/skeleton"
 import { Award, BarChart, Download, TrendingUp, Users } from "lucide-react";
+import * as XLSX from 'xlsx';
 
 const AdminStatisticsTab = () => {
 
@@ -15,28 +16,52 @@ const AdminStatisticsTab = () => {
     })
     const [isLoading, setIsLoading] = useState(true)
 
+    const handleDownload = () => {
+        const ws = XLSX.utils.json_to_sheet([{
+            "ТГ переходов": stats.tg_visit_count,
+            "Обшие резултатов": stats.totalResults,
+            "прошедших тест до конца": stats.completeResults,
+            "средний балл": Math.round(+stats.averageScore)
+        }]);
+
+        // Adjust column widths based on the maximum length of the content in each column
+        const range = XLSX.utils.decode_range(ws['!ref']); // Get the range of the sheet
+        const colWidths = [];
+
+        // Loop through the columns and calculate max length
+        for (let col = range.s.c; col <= range.e.c; col++) {
+            let maxLength = 0;
+            // Loop through the rows and find the maximum length of the cell content for each column
+            for (let row = range.s.r; row <= range.e.r; row++) {
+                const cellAddress = { r: row, c: col };
+                const cell = ws[XLSX.utils.encode_cell(cellAddress)];
+                if (cell && cell.v) {
+                    maxLength = Math.max(maxLength, String(cell.v).length);
+                }
+            }
+            colWidths.push({ wpx: maxLength * 10 }); // Set column width (multiplied by 10 for spacing)
+        }
+
+        // Assign the calculated column widths to the worksheet
+        ws['!cols'] = colWidths;
+
+        // Create a new workbook and append the worksheet
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        // Write the Excel file and trigger the download
+        // XLSX.writeFile(wb, 'data.xlsx');
+        XLSX.writeFile(wb, 'статистика.xlsx');
+    }
+
     useEffect(() => {
         getStats().then((res) => {
             if (res.status === 200) {
-
                 setStats(res)
-    //             "tg_visit_count": 3,
-    // "totalResults": 10,
-    // "completeResults": 4,
-    // "averageScore": "6.2000000000000000"
             }
             setIsLoading(false)
         })
     }, [])
-
-    console.log(stats)
-
-    // const mockStats = {
-    //     tg_visit_count: stats?.tg_visit_count || 0,
-    //     total_assessments: 120,
-    //     completed_assessments: 85,
-    //     average_score: 72,
-    //   }
 
     return (
         <div className="py-8">
@@ -47,7 +72,7 @@ const AdminStatisticsTab = () => {
                         <p className="text-muted-foreground mt-1">Обзор активности и результатов тестирования</p>
                     </div>
 
-                    <Button variant="outline" className="flex items-center gap-2">
+                    <Button onClick={handleDownload} variant="outline" className="flex items-center gap-2">
                         <Download className="h-4 w-4" />
                         Загрузить excel
                     </Button>
