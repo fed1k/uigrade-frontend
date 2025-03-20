@@ -6,7 +6,7 @@ function Mainlayout() {
   const route = useLocation()
 
   return (
-    <div className='px-5 min-h-screen py-5 pb-12 bg-[#F4F4F4]'>
+    <div className='px-5 min-h-screen py-5 bg-[#F4F4F4]'>
       {route.pathname !== "/admin" ? <header>
         <Navbar/>
       </header> : <></>}

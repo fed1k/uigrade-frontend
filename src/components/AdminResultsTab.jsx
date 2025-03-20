@@ -11,42 +11,42 @@ import { getResults } from "../services/services"
 
 export default function AdminResultsTab() {
   // Sample data from the provided JSON
-//   const [initialData, setInitialData] = useState([])
-//   const initialData = [
-//     {
-//       id: 1,
-//       score: 0,
-//       grade: "Junior",
-//       timestamp: "2025-03-14T21:38:42.788Z",
-//       status: "progress",
-//       correct_count: 0,
-//       wrong_count: 0,
-//       createdAt: "2025-03-14T21:38:42.790Z",
-//       updatedAt: "2025-03-14T21:38:42.790Z",
-//     },
-//     {
-//       id: 2,
-//       score: 2,
-//       grade: "Junior",
-//       timestamp: "2025-03-14T21:41:36.275Z",
-//       status: "progress",
-//       correct_count: 1,
-//       wrong_count: 0,
-//       createdAt: "2025-03-14T21:41:36.276Z",
-//       updatedAt: "2025-03-14T21:43:48.861Z",
-//     },
-//     {
-//       id: 3,
-//       score: 0,
-//       grade: "Senior",
-//       timestamp: "2025-03-15T21:44:06.935Z",
-//       status: "completed",
-//       correct_count: 0,
-//       wrong_count: 0,
-//       createdAt: "2025-03-15T21:44:06.936Z",
-//       updatedAt: "2025-03-15T21:44:06.936Z",
-//     },
-//   ]
+  //   const [initialData, setInitialData] = useState([])
+  //   const initialData = [
+  //     {
+  //       id: 1,
+  //       score: 0,
+  //       grade: "Junior",
+  //       timestamp: "2025-03-14T21:38:42.788Z",
+  //       status: "progress",
+  //       correct_count: 0,
+  //       wrong_count: 0,
+  //       createdAt: "2025-03-14T21:38:42.790Z",
+  //       updatedAt: "2025-03-14T21:38:42.790Z",
+  //     },
+  //     {
+  //       id: 2,
+  //       score: 2,
+  //       grade: "Junior",
+  //       timestamp: "2025-03-14T21:41:36.275Z",
+  //       status: "progress",
+  //       correct_count: 1,
+  //       wrong_count: 0,
+  //       createdAt: "2025-03-14T21:41:36.276Z",
+  //       updatedAt: "2025-03-14T21:43:48.861Z",
+  //     },
+  //     {
+  //       id: 3,
+  //       score: 0,
+  //       grade: "Senior",
+  //       timestamp: "2025-03-15T21:44:06.935Z",
+  //       status: "completed",
+  //       correct_count: 0,
+  //       wrong_count: 0,
+  //       createdAt: "2025-03-15T21:44:06.936Z",
+  //       updatedAt: "2025-03-15T21:44:06.936Z",
+  //     },
+  //   ]
 
   const [assessments, setAssessments] = useState([])
   const [filter, setFilter] = useState("all")
@@ -56,8 +56,8 @@ export default function AdminResultsTab() {
     filter === "all"
       ? assessments
       : assessments.filter((assessment) =>
-          filter === "unspecified" ? assessment.grade === "unspecified" : assessment.grade === filter,
-        )
+        filter === "unspecified" ? assessment.grade === "unspecified" : assessment.grade === filter,
+      )
 
   // Helper function to get grade-specific styling
   const getGradeStyles = (grade) => {
@@ -106,10 +106,10 @@ export default function AdminResultsTab() {
 
   useEffect(() => {
     getResults().then((res) => {
-        console.log(res)
-        if (res.status === 200) {
-            setAssessments(res.data)
-        }
+      console.log(res)
+      if (res.status === 200) {
+        setAssessments(res.data)
+      }
     })
   }, [])
 
@@ -118,9 +118,9 @@ export default function AdminResultsTab() {
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Assessment Results</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Результаты оценки</h1>
             <p className="text-muted-foreground mt-1">
-              Track your progress and performance across different skill levels
+              Отслеживайте свой прогресс и результаты на разных уровнях мастерства
             </p>
           </div>
 
@@ -133,10 +133,10 @@ export default function AdminResultsTab() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setFilter("all")}>All Grades</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilter("Junior")}>Junior</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilter("Middle")}>Middle</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilter("Senior")}>Senior</DropdownMenuItem>
+                <DropdownMenuItem className="bg-white cursor-pointer hover:bg-[hsl(214.3_31.8%_91.4%)]" onClick={() => setFilter("all")}>All Grades</DropdownMenuItem>
+                <DropdownMenuItem className="bg-white cursor-pointer hover:bg-[hsl(214.3_31.8%_91.4%)]" onClick={() => setFilter("Junior")}>Junior</DropdownMenuItem>
+                <DropdownMenuItem className="bg-white cursor-pointer hover:bg-[hsl(214.3_31.8%_91.4%)]" onClick={() => setFilter("Middle")}>Middle</DropdownMenuItem>
+                <DropdownMenuItem className="bg-white cursor-pointer hover:bg-[hsl(214.3_31.8%_91.4%)]" onClick={() => setFilter("Senior")}>Senior</DropdownMenuItem>
                 {/* <DropdownMenuItem onClick={() => setFilter("unspecified")}>Unspecified</DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -167,7 +167,7 @@ export default function AdminResultsTab() {
                         {format(new Date(assessment.timestamp), "MMM d, yyyy • h:mm a")}
                       </CardDescription>
                     </div>
-                    <Badge className={styles.badge}>
+                    <Badge className={styles.badge + " text-white"}>
                       {assessment.grade}
                     </Badge>
                   </div>
@@ -204,7 +204,7 @@ export default function AdminResultsTab() {
                       <div className="flex flex-col items-center justify-center p-3 rounded-lg bg-background border">
                         <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-1">
                           <XCircle className="h-4 w-4 text-red-500" />
-                          <span>Неправилной</span>
+                          <span>Неправилнойs</span>
                         </div>
                         <span className="text-xl font-bold">{assessment.wrong_count}</span>
                       </div>

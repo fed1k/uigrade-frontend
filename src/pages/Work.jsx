@@ -20,7 +20,10 @@ function Work() {
   const [corrects, setCorrects] = useState(0)
 
   const handleNext = async (option, index) => {
-    const result = await checkAnswer(JSON.stringify({ question_id: currentQuestion.id, answer: option, result_id: +sessionStorage.getItem("result_id") }));
+    let result;
+    if (!isCorrect) {
+      result = await checkAnswer(JSON.stringify({ question_id: currentQuestion.id, answer: option, result_id: +sessionStorage.getItem("result_id") }));
+    }
     if (result.correct) {
       setIsCorrect("correct");
       setCorrects(corrects + 1)
@@ -51,7 +54,7 @@ function Work() {
       setIsCorrect("");
       setCorrectAnswer("");
     } else {
-      
+
       navigate("/middle");
       sessionStorage.removeItem("currentQuestion")
     }
@@ -90,45 +93,51 @@ function Work() {
   }, []);
 
   return (
-    <div className='max-w-[794px] mx-auto bg-white my-5 p-5 py-5 rounded-[24px] flex items-center gap-3 justify-center flex-col'>
-      <div className="relative flex items-center h-12 md:mb-8 rounded-[16px] w-full bg-[#C8C8C833]">
+    <div className='max-w-[794px] overflow-y-hidden mx-auto bg-white mt-5 p-5 py-5 rounded-[24px] flex items-center justify-center flex-col'>
+      <div className="relative flex items-center h-6 sm:h-10 md:mb-4 rounded-[16px] w-full bg-[#C8C8C833]">
         <div
-          className="h-12 bg-[#01A3FE] transition-all flex items-center justify-center rounded-[16px]"
+          className="h-6 sm:h-10 bg-[#01A3FE] transition-all flex items-center justify-center rounded-[16px]"
           style={{ width: `${progress}%` }}
         >
-          <span className="absolute left-[20%] md:left-[40%] text-Inter text-center leading-5 text-[20px] text-[#222222] font-medium">
+          <span className="absolute left-[20%] md:left-[40%] text-Inter text-center leading-5 text-sm sm:text-[20px] text-[#222222] font-medium">
             {level} уровень {number} / {questions.length}
           </span>
         </div>
       </div>
 
-      <p className='text-Inter font-medium text-[16px] md:text-[20px] mb-5 text-center leading-5 text-[#C8C8C8]'>
+      <p className='text-Inter font-medium text-[16px] md:text-[20px] text-center leading-5 text-[#C8C8C8]'>
         Выбери правильный вариант
       </p>
 
-      {pickedIndex === 0 || pickedIndex === "default" ? (
-        <div className='w-full pt-6 cursor-pointer hover:scale-[1.02] transition-all mb-2 rounded-[24px]'>
-          <CorrectOrWrong answer={isCorrect} />
-          <img
-            onClick={() => handleNext(currentQuestion?.image1, 0)}
-            src={"https://s3.regru.cloud/uigrade/" + currentQuestion?.image1}
-            className='w-full cursor-pointer h-full object-cover rounded-[24px]'
-            alt=""
-          />
-        </div>
-      ) : null}
+      <div className='flex gap-4 justify-center'>
 
-      {pickedIndex === 1 || pickedIndex === "default" ? (
-        <div className='w-full pt-6 cursor-pointer rounded-[24px]'>
-          <CorrectOrWrong answer={isCorrect} />
-          <img
-            onClick={() => handleNext(currentQuestion?.image2, 1)}
-            src={"https://s3.regru.cloud/uigrade/" + currentQuestion?.image2}
-            className='w-full hover:scale-[1.02] transition-all cursor-pointer h-full object-cover rounded-[24px]'
-            alt=""
-          />
-        </div>
-      ) : null}
+
+        {pickedIndex === 0 || pickedIndex === "default" ? (
+          <div className='w-full max-h-[250px] pt-4 cursor-pointer hover:scale-[1.02] transition-all mb-2 rounded-[24px]'>
+            <CorrectOrWrong answer={isCorrect} />
+            <img
+              onClick={() => handleNext(currentQuestion?.image1, 0)}
+              src={"https://s3.regru.cloud/uigrade/" + currentQuestion?.image1}
+              className={`w-full hover:scale-[1.01] cursor-pointer h-[80%] object-cover rounded-[24px]`}
+              alt=""
+            />
+          </div>
+        ) : null}
+
+        {pickedIndex === "default" && <div className='h-[70%] bg-gray-200 w-0.5'></div>}
+
+        {pickedIndex === 1 || pickedIndex === "default" ? (
+          <div className='w-full max-h-[250px] pt-4 cursor-pointer rounded-[24px]'>
+            <CorrectOrWrong answer={isCorrect} />
+            <img
+              onClick={() => handleNext(currentQuestion?.image2, 1)}
+              src={"https://s3.regru.cloud/uigrade/" + currentQuestion?.image2}
+              className={`w-full hover:scale-[1.01] transition-all cursor-pointer h-[80%] object-cover rounded-[24px]`}
+              alt=""
+            />
+          </div>
+        ) : null}
+      </div>
 
       {isCorrect ? (
         <div className='flex gap-2 w-[70%]'>
