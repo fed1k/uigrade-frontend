@@ -3,6 +3,13 @@ import { addGrade, addHardness, deleteGrade, deleteHardness, deleteQuestion, fet
 import { ToastContainer, toast } from "react-toastify"
 import { HiOutlinePencilSquare } from "react-icons/hi2"
 import { FaTrashAlt } from "react-icons/fa"
+import { Pencil, Trash2 } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+import { Input } from "./ui/input"
+import { Button } from "./ui/button"
+import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "./ui/table"
+
+import { Dialog, DialogContent, DialogClose } from "./ui/dialog"
 
 const ControlTab = ({ levels, setLevels }) => {
     const [questions, setQuestions] = useState([])
@@ -14,8 +21,19 @@ const ControlTab = ({ levels, setLevels }) => {
     const [hardness, setHardness] = useState("")
     const [point, setPoint] = useState()
     const [loading, setLoading] = useState(false)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [editHardnressData, setEditHardnessData] = useState({
+        id: null,
+        newName: "",
+        point: null
+    })
 
-    const modalRef = useRef(null)
+
+    const handleEdit = (value) => {
+        setIsEditDialogOpen(true)
+        setEditHardnessData({...value, newName: value.name})
+    }
 
     const handleGradeChange = (name, value) => {
         setGrade((prev) => ({ ...prev, [name]: value }))
@@ -23,13 +41,8 @@ const ControlTab = ({ levels, setLevels }) => {
 
 
     const openModal = (url) => {
-        modalRef.current.showModal()
+        setIsDialogOpen(true)
         setModalQuestion(url)
-    }
-
-    const closeModal = () => {
-        setModalQuestion("")
-        modalRef.current.close()
     }
 
     const addHard = async () => {
@@ -94,6 +107,9 @@ const ControlTab = ({ levels, setLevels }) => {
         }
     }
 
+    // grade => id, newName, min_point, max_point
+    // hardness => id, newName, point
+
 
     useEffect(() => {
         fetchQuestions().then((qsn) => {
@@ -105,87 +121,258 @@ const ControlTab = ({ levels, setLevels }) => {
     }, [])
 
     return (
-        <div className="pt-6">
-            <p className={`text-xl font-medium text-gray-500`}>Сложносты</p>
+        <div className="space-y-8 py-6">
             <ToastContainer />
-            <div className="my-4">
-                <input disabled={loading} value={hardness} onChange={(e) => setHardness(e.target.value)} className="py-1 disabled:opacity-50 disabled:cursor-not-allowed px-2" type="text" placeholder="Уровен" />
-                <input disabled={loading} value={point} onChange={(e) => setPoint(+e.target.value)} type="text" className="py-1 disabled:opacity-50 disabled:cursor-not-allowed px-2 ml-2" placeholder="Балл" />
-                <button disabled={loading} onClick={addHard} className="border disabled:opacity-50 disabled:cursor-not-allowed py-1 px-4 ml-2" type="button">Добавить</button>
-            </div>
-            <table className="bg-white shadow">
-                <thead>
-                    <tr>
-                        <th className="p-2">Уровен</th>
-                        <th className="p-2">Балл</th>
-                        <th className="p-2">Изменит</th>
-                        <th className="p-2">Удалить</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {levels?.length ? levels.map((lvl) => (
-                        <tr>
-                            <td className="p-2">{lvl.name}</td>
-                            <td className="p-2">{lvl.point}</td>
-                            <td className="p-2"><button className="mx-auto"><HiOutlinePencilSquare /></button></td>
-                            <td className="p-2"><button className="hover:bg-gray-400" onClick={() => delHardness(lvl.id)}><FaTrashAlt /></button></td>
-                        </tr>
-                    )) : <p>Нету уровны пока!</p>}
-                </tbody>
-            </table>
-            <dialog ref={modalRef}>
-                <div className="flex flex-col">
-
-                    <p onClick={closeModal} className="m-3 self-end cursor-pointer">X</p>
-                    <img className="m-4" src={"https://s3.regru.cloud/uigrade/" + modalQuestion} />
-                </div>
-            </dialog>
-            <p className="text-xl font-medium pt-4 pb-4 text-gray-500">Вопросы</p>
-            {questions.length ? questions.map((question) => (
-                <div className="flex px-4 justify-between items-center shadow bg-white py-2 rounded gap-4 mb-4">
-                    {question.question_text && <p>{question.question_text}</p>}
-                    <p>{question.level}</p>
-                    <div className="flex gap-2">
-
-                        <img onClick={() => openModal(question.image1)} className="w-20 cursor-pointer hover:scale-[1.03] h-20 border-2 border-green-600" src={"https://s3.regru.cloud/uigrade/" + question.image1} alt="" />
-                        <img onClick={() => openModal(question.image2)} className="w-20 cursor-pointer hover:scale-[1.03] h-20 border-2 border-red-600" src={"https://s3.regru.cloud/uigrade/" + question.image2} alt="" />
-
-                        <button onClick={() => delQuestion(question.id)} type="button" className="border self-center px-2">Удалить</button>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-xl font-medium text-gray-700">Сложносты</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex flex-wrap gap-3 mb-6">
+                        <Input
+                            disabled={loading}
+                            value={hardness}
+                            onChange={(e) => setHardness(e.target.value)}
+                            className="max-w-xs"
+                            placeholder="Уровен"
+                        />
+                        <Input
+                            disabled={loading}
+                            value={point}
+                            onChange={(e) => setPoint(+e.target.value)}
+                            type="number"
+                            className="max-w-xs"
+                            placeholder="Балл"
+                        />
+                        <Button disabled={loading} onClick={addHard} variant="outline">
+                            Добавить
+                        </Button>
                     </div>
-                </div>
-            )) : <p>0 вопросы</p>}
 
-            <p className="text-xl font-medium pt-4 pb-4 text-gray-500">Грейди</p>
+                    <div className="rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Уровен</TableHead>
+                                    <TableHead>Балл</TableHead>
+                                    <TableHead className="w-[100px]">Изменит</TableHead>
+                                    <TableHead className="w-[100px]">Удалить</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {levels?.length ? (
+                                    levels.map((lvl) => (
+                                        <TableRow key={lvl.id}>
+                                            <TableCell>{lvl.name}</TableCell>
+                                            <TableCell>{lvl.point}</TableCell>
+                                            <TableCell>
+                                                <Button onClick={() => handleEdit(lvl)} variant="ghost" size="icon">
+                                                    <Pencil className="h-4 w-4" />
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => delHardness(lvl.id)}
+                                                    className="text-destructive hover:text-destructive/90"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={4} className="text-center py-6 text-muted-foreground">
+                                            Нету уровны пока!
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </CardContent>
+            </Card>
 
-            <div className="my-4">
-                <input value={grade.name} name="name" onChange={(e) => handleGradeChange(e.target.name, e.target.value)} className="py-1 disabled:opacity-50 disabled:cursor-not-allowed px-2" type="text" placeholder="Грейд" />
-                <input value={grade.min_point} name="min_point" onChange={(e) => handleGradeChange(e.target.name, e.target.value)} type="text" className="py-1 disabled:opacity-50 disabled:cursor-not-allowed px-2 ml-2" placeholder="Мин балл" />
-                <input value={grade.max_point} name="max_point" onChange={(e) => handleGradeChange(e.target.name, e.target.value)} type="text" className="py-1 disabled:opacity-50 disabled:cursor-not-allowed px-2 ml-2" placeholder="Макс балл" />
-                <button onClick={addGrd} className="border disabled:opacity-50 disabled:cursor-not-allowed py-1 px-4 ml-2" type="button">Добавить</button>
-            </div>
-            <table className="bg-white shadow">
-                <thead>
-                    <tr>
-                        <th className="p-2">Грейд</th>
-                        <th className="p-2">Мин</th>
-                        <th className="p-2">Макс</th>
-                        <th className="p-2">Изменить</th>
-                        <th className="p-2">Удалить</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {grades?.length ? grades.map((grd) => (
-                        <tr>
-                            <td className="p-2">{grd.name}</td>
-                            <td className="p-2">{grd.min_point}</td>
-                            <td className="p-2">{grd.max_point}</td>
-                            <td className="p-2"><button className="mx-auto"><HiOutlinePencilSquare /></button></td>
-                            <td className="p-2"><button onClick={() => deltGrade(grd.id)} className="hover:bg-gray-400"><FaTrashAlt /></button></td>
-                        </tr>
-                    )) : <p>Нету грейд пока!</p>}
-                </tbody>
-            </table>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-xl font-medium text-gray-700">Вопросы</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                        {questions.length ? (
+                            questions.map((question) => (
+                                <div
+                                    key={question.id}
+                                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 rounded-lg border bg-card"
+                                >
+                                    <div className="flex-1 min-w-0">
+                                        {question.question_text && <p className="font-medium truncate">{question.question_text}</p>}
+                                        <p className="text-sm text-muted-foreground">Уровень: {question.level}</p>
+                                    </div>
+                                    <div className="flex flex-wrap gap-3 items-center">
+                                        <div className="flex gap-2">
+                                            <div
+                                                onClick={() => openModal(question.image1)}
+                                                className="relative w-16 h-16 rounded-md overflow-hidden border-2 border-emerald-500 cursor-pointer transition-transform hover:scale-105"
+                                            >
+                                                <img
+                                                    src={"https://s3.regru.cloud/uigrade/" + question.image1}
+                                                    alt="Correct answer"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                            <div
+                                                onClick={() => openModal(question.image2)}
+                                                className="relative w-16 h-16 rounded-md overflow-hidden border-2 border-rose-500 cursor-pointer transition-transform hover:scale-105"
+                                            >
+                                                <img
+                                                    src={"https://s3.regru.cloud/uigrade/" + question.image2}
+                                                    alt="Wrong answer"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                        </div>
+                                        <Button
+                                            onClick={() => delQuestion(question.id)}
+                                            variant="outline"
+                                            size="sm"
+                                            className="text-destructive border-destructive hover:bg-destructive/10"
+                                        >
+                                            <Trash2 className="h-4 w-4 mr-2" />
+                                            Удалить
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center py-8 text-muted-foreground">0 вопросы</div>
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-xl font-medium text-gray-700">Грейди</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex flex-wrap gap-3 mb-6">
+                        <Input
+                            value={grade.name}
+                            name="name"
+                            onChange={(e) => handleGradeChange(e.target.name, e.target.value)}
+                            className="max-w-xs"
+                            placeholder="Грейд"
+                        />
+                        <Input
+                            value={grade.min_point}
+                            name="min_point"
+                            onChange={(e) => handleGradeChange(e.target.name, +e.target.value)}
+                            type="number"
+                            className="max-w-xs"
+                            placeholder="Мин балл"
+                        />
+                        <Input
+                            value={grade.max_point}
+                            name="max_point"
+                            onChange={(e) => handleGradeChange(e.target.name, +e.target.value)}
+                            type="number"
+                            className="max-w-xs"
+                            placeholder="Макс балл"
+                        />
+                        <Button onClick={addGrd} variant="outline">
+                            Добавить
+                        </Button>
+                    </div>
+
+                    <div className="rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Грейд</TableHead>
+                                    <TableHead>Мин</TableHead>
+                                    <TableHead>Макс</TableHead>
+                                    <TableHead className="w-[100px]">Изменить</TableHead>
+                                    <TableHead className="w-[100px]">Удалить</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {grades?.length ? (
+                                    grades.map((grd) => (
+                                        <TableRow key={grd.id}>
+                                            <TableCell>{grd.name}</TableCell>
+                                            <TableCell>{grd.min_point}</TableCell>
+                                            <TableCell>{grd.max_point}</TableCell>
+                                            <TableCell>
+                                                <Button variant="ghost" size="icon">
+                                                    <Pencil className="h-4 w-4" />
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => deltGrade(grd.id)}
+                                                    className="text-destructive hover:text-destructive/90"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">
+                                            Нету грейд пока!
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="sm:max-w-md">
+                    <div className="aspect-auto max-h-[80vh] overflow-auto">
+                        <img src={"https://s3.regru.cloud/uigrade/" + modalQuestion} alt="Question image" className="w-full h-auto" />
+                    </div>
+                    <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+                        <span className="sr-only">Close</span>
+                    </DialogClose>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                <DialogContent className="sm:max-w-md bg-white">
+                    <div className="flex flex-wrap bg-white gap-3 mb-6">
+                        <Input
+                            disabled={loading}
+                            value={editHardnressData.newName}
+                            onChange={(e) => setHardness(e.target.value)}
+                            className="max-w-xs"
+                            placeholder="Уровен"
+                        />
+                        <Input
+                            disabled={loading}
+                            value={editHardnressData.point}
+                            onChange={(e) => setPoint(+e.target.value)}
+                            type="number"
+                            className="max-w-xs"
+                            placeholder="Балл"
+                        />
+                        <Button disabled={loading} onClick={addHard} variant="outline">
+                            Добавить
+                        </Button>
+                    </div>
+                    <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+                        <span className="sr-only">Close</span>
+                    </DialogClose>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
