@@ -25,7 +25,7 @@ const AdminPage = () => {
 
     const [levels, setLevels] = useState([])
 
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState("add-question");
 
     const [selectedLevel, setSelectedLevel] = useState({ name: "", id: null })
 
