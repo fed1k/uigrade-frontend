@@ -9,7 +9,7 @@ function Middle() {
   const handleTgRedirect = async() => {
     const response = await incrementTgVisitCount();
 
-    console.log(response)
+    // console.log(response)
   }
 
   useEffect(() => {

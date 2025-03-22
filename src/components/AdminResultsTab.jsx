@@ -106,7 +106,7 @@ export default function AdminResultsTab() {
 
   useEffect(() => {
     getResults().then((res) => {
-      console.log(res)
+      // console.log(res)
       if (res.status === 200) {
         setAssessments(res.data)
       }

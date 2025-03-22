@@ -84,7 +84,7 @@ export const addGrade = async (data) => {
     return response.json();
 }
 
-export const deleteGrade = async(data) => {
+export const deleteGrade = async (data) => {
     const url = BASE_API_URL + "/grade";
     const response = await fetch(url, {
         method: "DELETE",
@@ -97,10 +97,10 @@ export const deleteGrade = async(data) => {
     return response.json();
 }
 
-export const getStats = async() => {
+export const getStats = async () => {
     const url = BASE_API_URL + "/stats";
     const response = await fetch(url);
-    const data= await response.json();
+    const data = await response.json();
 
     return data
 }
@@ -116,7 +116,7 @@ export const incrementTgVisitCount = async () => {
     return response.json()
 }
 
-export const initResult = async() => {
+export const initResult = async () => {
     const url = BASE_API_URL + "/result";
     const response = await fetch(url, {
         method: "POST",
@@ -127,14 +127,40 @@ export const initResult = async() => {
     return response.json()
 }
 
-export const getResult = async(result_id) => {
+export const getResult = async (result_id) => {
     const url = BASE_API_URL + `/result/${result_id}`;
     const response = await fetch(url);
     return response.json();
 }
 
-export const getResults = async() => {
+export const getResults = async () => {
     const url = BASE_API_URL + "/result";
     const response = await fetch(url);
+    return response.json()
+}
+
+export const editHardness = async (data) => {
+    const url = BASE_API_URL + "/hardness";
+    const response = await fetch(url, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+
+    return response.json()
+}
+
+export const editGrade = async (data) => {
+    const url = BASE_API_URL + "/grade";
+    const response = await fetch(url, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json", // Set content type to JSON
+        }
+    })
+
     return response.json()
 }

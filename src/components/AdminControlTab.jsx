@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { addGrade, addHardness, deleteGrade, deleteHardness, deleteQuestion, fetchQuestions, getGrades } from "../services/services"
+import { addGrade, addHardness, deleteGrade, deleteHardness, deleteQuestion, editGrade, editHardness, fetchQuestions, getGrades } from "../services/services"
 import { ToastContainer, toast } from "react-toastify"
 import { HiOutlinePencilSquare } from "react-icons/hi2"
 import { FaTrashAlt } from "react-icons/fa"
@@ -23,16 +23,39 @@ const ControlTab = ({ levels, setLevels }) => {
     const [loading, setLoading] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [isGradeDialogOpen, setIsGradeDialogOpen] = useState(false)
     const [editHardnressData, setEditHardnessData] = useState({
         id: null,
         newName: "",
         point: null
     })
 
+    const [editGradeData, setEditGradeData] = useState({
+        id: null,
+        newName: "",
+        min_point: null,
+        max_point: null
+    })
+
+    const closeModalRef = useRef(null)
+
 
     const handleEdit = (value) => {
         setIsEditDialogOpen(true)
         setEditHardnessData({...value, newName: value.name})
+    }
+
+    const handleEditChange = (name, value) => {
+        setEditHardnessData((prev) => ({...prev, [name]: value}))
+    }
+
+    const handleEditGrade = (value) => {
+        setIsGradeDialogOpen(true)
+        setEditGradeData({...value, newName: value.name})
+    }
+
+    const handleEditGradeChange = (name, value) => {
+        setEditGradeData((prev) => ({...prev, [name]: value}))
     }
 
     const handleGradeChange = (name, value) => {
@@ -107,8 +130,40 @@ const ControlTab = ({ levels, setLevels }) => {
         }
     }
 
-    // grade => id, newName, min_point, max_point
-    // hardness => id, newName, point
+    const savehardnessEdit = async() => {
+        setLoading(true)
+        const response = await editHardness(editHardnressData)
+        setLoading(false)
+        closeModalRef?.current?.click()
+        if (response.status === 200) {
+            setLevels(levels.map(level => {
+                if (level.id === editHardnressData.id) {
+                    return {name: editHardnressData.newName, id: editHardnressData.id, point: editHardnressData.point}; // Replace `updatedLevel` with the updated value for the current level
+                }
+                return level;
+            }));
+        } else {
+            toast.error("Попробуй чут позже")
+        }
+    }
+
+    const saveGradeEdit = async() => {
+        setLoading(true)
+        const response = await editGrade(editGradeData)
+        setLoading(false)
+        // close modal here
+        closeModalRef?.current?.click()
+        if (response.status === 200) {
+            setGrades(grades.map(grd => {
+                if (grd.id === editGradeData.id) {
+                    return {name: editGradeData.newName, id: editGradeData.id, min_point: editGradeData.min_point, max_point: editGradeData.max_point}; // Replace `updatedLevel` with the updated value for the current level
+                }
+                return grd;
+            }));
+        } else {
+            toast.error("Попробуй чут позже")
+        }
+    }
 
 
     useEffect(() => {
@@ -306,7 +361,7 @@ const ControlTab = ({ levels, setLevels }) => {
                                             <TableCell>{grd.min_point}</TableCell>
                                             <TableCell>{grd.max_point}</TableCell>
                                             <TableCell>
-                                                <Button variant="ghost" size="icon">
+                                                <Button onClick={() => handleEditGrade(grd)} variant="ghost" size="icon">
                                                     <Pencil className="h-4 w-4" />
                                                 </Button>
                                             </TableCell>
@@ -334,7 +389,7 @@ const ControlTab = ({ levels, setLevels }) => {
                     </div>
                 </CardContent>
             </Card>
-
+            {/* for previewing question image */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent className="sm:max-w-md">
                     <div className="aspect-auto max-h-[80vh] overflow-auto">
@@ -346,30 +401,68 @@ const ControlTab = ({ levels, setLevels }) => {
                 </DialogContent>
             </Dialog>
 
+            {/* for editing hardness level */}
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent className="sm:max-w-md bg-white">
                     <div className="flex flex-wrap bg-white gap-3 mb-6">
                         <Input
                             disabled={loading}
                             value={editHardnressData.newName}
-                            onChange={(e) => setHardness(e.target.value)}
+                            onChange={(e) => handleEditChange("newName", e.target.value)}
                             className="max-w-xs"
                             placeholder="Уровен"
                         />
                         <Input
                             disabled={loading}
                             value={editHardnressData.point}
-                            onChange={(e) => setPoint(+e.target.value)}
+                            onChange={(e) => handleEditChange("point", +e.target.value)}
                             type="number"
                             className="max-w-xs"
                             placeholder="Балл"
                         />
-                        <Button disabled={loading} onClick={addHard} variant="outline">
-                            Добавить
+                        <Button disabled={loading} onClick={savehardnessEdit} variant="outline">
+                            Сохранить
                         </Button>
                     </div>
                     <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-                        <span className="sr-only">Close</span>
+                        <span ref={closeModalRef} className="sr-only">Close</span>
+                    </DialogClose>
+                </DialogContent>
+            </Dialog>
+
+            {/* for editing grade level */}
+            <Dialog open={isGradeDialogOpen} onOpenChange={setIsGradeDialogOpen}>
+                <DialogContent className="sm:max-w-md bg-white">
+                    <div className="flex flex-wrap bg-white gap-3 mb-6">
+                        <Input
+                            disabled={loading}
+                            value={editGradeData.newName}
+                            onChange={(e) => handleEditGradeChange("newName", e.target.value)}
+                            className="max-w-xs"
+                            placeholder="Уровен"
+                        />
+                        <Input
+                            disabled={loading}
+                            value={editGradeData.min_point}
+                            onChange={(e) => handleEditGradeChange("min_point", +e.target.value)}
+                            type="number"
+                            className="max-w-xs"
+                            placeholder="Мин балл"
+                        />
+                        <Input
+                            disabled={loading}
+                            value={editGradeData.max_point}
+                            onChange={(e) => handleEditGradeChange("max_point", +e.target.value)}
+                            type="number"
+                            className="max-w-xs"
+                            placeholder="Макс балл"
+                        />
+                        <Button disabled={loading} onClick={saveGradeEdit} variant="outline">
+                            Сохранить
+                        </Button>
+                    </div>
+                    <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+                        <span ref={closeModalRef} className="sr-only">Close</span>
                     </DialogClose>
                 </DialogContent>
             </Dialog>
