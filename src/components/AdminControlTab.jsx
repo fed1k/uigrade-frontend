@@ -181,14 +181,14 @@ const ControlTab = ({ levels, setLevels }) => {
         formData.append("level", editQuestionData.level)
         formData.append("level_id", editQuestionData.level_id)
         formData.append("desc", editQuestionData.desc)
+        formData.append("image1", editQuestionData.image1)
+        formData.append("image2", editQuestionData.image2)
 
-        if (editQuestionData.imageChanged.image1) {
-            formData.append("image1", editQuestionData.image1)
-        }
+        // if (editQuestionData.imageChanged.image1) {
+        // }
 
-        if (editQuestionData.imageChanged.image2) {
-            formData.append("image2", editQuestionData.image2)
-        }
+        // if (editQuestionData.imageChanged.image2) {
+        // }
 
         // Replace with your actual API call
         const response = await editQuestion(formData)
