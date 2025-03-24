@@ -98,12 +98,12 @@ function Work() {
   return (
     <div className="max-w-[794px] mx-auto bg-white mt-1 sm:mt-3 p-2 sm:p-4 rounded-[24px] flex flex-col h-[calc(100vh-6rem)] max-h-[800px] overflow-hidden">
       {/* Progress bar - smaller height */}
-      <div className="relative flex items-center h-4 sm:h-6 rounded-[16px] w-full bg-[#C8C8C833] mb-1 sm:mb-2">
+      <div className="relative flex items-center h-10 rounded-[16px] w-full bg-[#C8C8C833] mb-1 sm:mb-2">
         <div
           className="h-full bg-[#01A3FE] transition-all flex items-center justify-center rounded-[16px]"
           style={{ width: `${progress}%` }}
         >
-          <span className="absolute inset-x-0 text-center text-xs sm:text-sm text-[#222222] font-medium">
+          <span className="absolute text-Inter inset-x-0 text-center text-[#222222] font-medium">
             {level} уровень {number} / {questions.length}
           </span>
         </div>
@@ -119,15 +119,15 @@ function Work() {
       )}
 
       {/* Images container - strict height control */}
-      <div className="flex gap-1 sm:gap-2 justify-center flex-1 min-h-0 max-h-[calc(100%-6rem)]">
+      <div className="flex gap-1 sm:gap-2 justify-center items-center flex-col flex-1 sm:flex-row min-h-0 ">
         {pickedIndex === 0 || pickedIndex === "default" ? (
-          <div className={`w-full flex flex-col ${pickedIndex !== "default" ? "max-h-full" : "max-h-full"}`}>
+          <div className={`w-full flex flex-col`}>
             <CorrectOrWrong answer={isCorrect} />
-            <div className="flex-1 min-h-0 overflow-hidden rounded-[24px]">
+            <div className={`flex-1 min-h-0 ${pickedIndex !== "default" ? 'flex justify-center' : ''} overflow-hidden rounded-[24px]`}>
               <img
                 onClick={() => handleNext(currentQuestion?.image1, 0)}
                 src={"https://s3.regru.cloud/uigrade/" + currentQuestion?.image1}
-                className="w-full h-full object-contain sm:object-cover rounded-[24px] hover:scale-[1.01] transition-all cursor-pointer"
+                className={`w-[300px] h-[160px] mx-auto ${pickedIndex !== "default" ? 'sm:w-[500px] sm:h-[200px]' : ''} sm:mx-0 sm:w-full sm:h-full object-contain rounded-[24px] hover:scale-[1.01] transition-all cursor-pointer`}
                 alt=""
               />
             </div>
@@ -139,16 +139,16 @@ function Work() {
           </div>
         ) : null}
 
-        {pickedIndex === "default" && <div className="h-full bg-gray-200 w-0.5"></div>}
+        {pickedIndex === "default" && <div className="w-1/2 h-[1px] sm:h-full bg-gray-200 sm:w-0.5"></div>}
 
         {pickedIndex === 1 || pickedIndex === "default" ? (
-          <div className={`w-full flex flex-col ${pickedIndex !== "default" ? "max-h-full" : "max-h-full"}`}>
+          <div className={`w-full flex flex-col `}>
             <CorrectOrWrong answer={isCorrect} />
-            <div className="flex-1 min-h-0 overflow-hidden rounded-[24px]">
+            <div className={`flex-1 min-h-0 ${pickedIndex !== "default" ? 'flex justify-center' : ''} overflow-hidden rounded-[24px]`}>
               <img
                 onClick={() => handleNext(currentQuestion?.image2, 1)}
                 src={"https://s3.regru.cloud/uigrade/" + currentQuestion?.image2}
-                className="w-full h-full object-contain sm:object-cover rounded-[24px] hover:scale-[1.01] transition-all cursor-pointer"
+                className={`w-[300px] h-[160px] mx-auto sm:mx-0 ${pickedIndex !== "default" ? 'sm:w-[500px] sm:h-[200px]' : ''} sm:w-full sm:h-full object-contain rounded-[24px] hover:scale-[1.01] transition-all cursor-pointer`}
                 alt=""
               />
             </div>
