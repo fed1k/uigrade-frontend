@@ -87,7 +87,7 @@ const AdminPage = () => {
         })
 
         if (!localStorage.getItem("valid")) {
-            navigate("/")
+            navigate("/login")
         }
     }, [])
 
