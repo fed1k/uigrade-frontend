@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { checkAnswer, fetchQuestions } from "../services/services"
 import CorrectOrWrong from "../components/CorrectOrWrong"
+import {randomizeImageOrders} from "../utils/util"
 
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
@@ -67,6 +68,7 @@ function Work() {
 
   useEffect(() => {
     fetchQuestions().then((qsn) => {
+      randomizeImageOrders(qsn)
       setQuestions(qsn)
       setCurrentQuestion(qsn[number - 1])
       setLevel(qsn[number - 1].level)
@@ -127,7 +129,7 @@ function Work() {
               <img
                 onClick={() => handleNext(currentQuestion?.image1, 0)}
                 src={"https://s3.regru.cloud/uigrade/" + currentQuestion?.image1}
-                className={`w-[300px] h-[160px] mx-auto ${pickedIndex !== "default" ? 'sm:w-[500px] sm:h-[200px]' : ''} sm:mx-0 sm:w-full sm:h-full object-contain rounded-[24px] hover:scale-[1.01] transition-all cursor-pointer`}
+                className={`w-[300px] h-[160px] mx-auto ${pickedIndex !== "default" ? 'sm:w-[500px] sm:h-[200px]' : ''} sm:mx-0 object-contain rounded-[24px] hover:scale-[1.01] transition-all cursor-pointer`}
                 alt=""
               />
             </div>
@@ -148,7 +150,7 @@ function Work() {
               <img
                 onClick={() => handleNext(currentQuestion?.image2, 1)}
                 src={"https://s3.regru.cloud/uigrade/" + currentQuestion?.image2}
-                className={`w-[300px] h-[160px] mx-auto sm:mx-0 ${pickedIndex !== "default" ? 'sm:w-[500px] sm:h-[200px]' : ''} sm:w-full sm:h-full object-contain rounded-[24px] hover:scale-[1.01] transition-all cursor-pointer`}
+                className={`w-[300px] h-[160px] mx-auto sm:mx-0 ${pickedIndex !== "default" ? 'sm:w-[500px] sm:h-[200px]' : ''} object-contain rounded-[24px] hover:scale-[1.01] transition-all cursor-pointer`}
                 alt=""
               />
             </div>
