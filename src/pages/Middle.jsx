@@ -22,7 +22,7 @@ function Middle() {
   }, [])
 
   return (
-    <div className='max-w-[794px]  mx-auto bg-white mt-5 p-5 rounded-[24px] flex items-center gap-3 pt-6 flex-col px-5 md:px-[102px] pb-[20px] justify-center'>
+    <div className='max-w-[794px] h-[78vh] mx-auto bg-white mt-5 p-5 rounded-[24px] flex items-center gap-3 pt-6 flex-col px-5 md:px-[102px] pb-[20px] justify-center'>
       <div className='max-w-[590px] flex flex-col items-center'>
         <p className='text-Inter font-bold leading-[64px] text-[36px] lg:text-[64px] mb-5 md:mb-6 text-center text-[#222222]'>Твой уровень <br />
           {result?.grade}</p>

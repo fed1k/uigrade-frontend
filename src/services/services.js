@@ -164,3 +164,13 @@ export const editGrade = async (data) => {
 
     return response.json()
 }
+
+export const editQuestion = async (data) => {
+    const url = BASE_API_URL + "/questions";
+    const response = await fetch(url, {
+        method: "PATCH",
+        body: data
+    })
+    const result = await response.json()
+    return result
+}

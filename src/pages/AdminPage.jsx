@@ -14,6 +14,7 @@ import ControlTab from "../components/AdminControlTab";
 import AdminStatisticsTab from "../components/AdminStatisticsTab";
 import AdminResultsTab from "../components/AdminResultsTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
+import { Textarea } from "../components/ui/textarea";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -21,6 +22,7 @@ const AdminPage = () => {
     const [file1, setFile1] = useState()
     const [file2, setFile2] = useState()
     const [questionText, setQuestionText] = useState("")
+    const [desc, setDesc] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const [levels, setLevels] = useState([])
@@ -48,6 +50,7 @@ const AdminPage = () => {
         formData.append("image2", file2);  // 'file' should match the name on the backend
         formData.append("question_text", questionText)
         formData.append("level", selectedLevel.id)
+        formData.append("desc", desc)
 
 
         fetch(apiUrl + "/questions", {
@@ -168,6 +171,17 @@ const AdminPage = () => {
                                                 </SelectContent>
                                             </Select>
                                         </div>
+                                    </div>
+
+                                    {/* Description Field */}
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium">Описание</label>
+                                        <Textarea
+                                            value={desc}
+                                            onChange={(e) => setDesc(e.target.value)}
+                                            placeholder="Введите описание вопроса"
+                                            className="min-h-[100px]"
+                                        />
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
