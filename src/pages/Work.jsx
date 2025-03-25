@@ -98,7 +98,7 @@ function Work() {
   }, [])
 
   return (
-    <div className="max-w-[794px] mx-auto bg-white mt-1 sm:mt-3 p-2 sm:p-4 rounded-[24px] flex flex-col h-[calc(100vh-8rem)] max-h-[800px] overflow-hidden">
+    <div className={`max-w-[794px] mx-auto bg-white mt-1 sm:mt-3 p-2 sm:p-4 rounded-[24px] flex flex-col ${navigator.userAgent.match(/iPhone/i) ? "h-[calc(100vh-14rem)]" : "h-[calc(100vh-8rem)]"}  sm: max-h-[800px] overflow-hidden`}>
       {/* Progress bar - smaller height */}
       <div className="relative flex items-center h-10 rounded-[16px] w-full bg-[#C8C8C833] mb-1 sm:mb-2">
         <div
@@ -121,7 +121,7 @@ function Work() {
       )}
 
       {/* Images container - strict height control */}
-      <div className="flex gap-1 sm:gap-2 justify-center items-center flex-col flex-1 sm:flex-row min-h-0 ">
+      <div className="flex gap-4 justify-center items-center flex-col flex-1 sm:flex-row min-h-0 ">
         {pickedIndex === 0 || pickedIndex === "default" ? (
           <div className={`w-full flex flex-col`}>
             <CorrectOrWrong answer={isCorrect} />
