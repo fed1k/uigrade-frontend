@@ -98,7 +98,7 @@ function Work() {
   }, [])
 
   return (
-    <div className="max-w-[794px] mx-auto bg-white mt-1 sm:mt-3 p-2 sm:p-4 rounded-[24px] flex flex-col h-[calc(100vh-6rem)] max-h-[800px] overflow-hidden">
+    <div className="max-w-[794px] mx-auto bg-white mt-1 sm:mt-3 p-2 sm:p-4 rounded-[24px] flex flex-col h-[calc(100vh-8rem)] max-h-[800px] overflow-hidden">
       {/* Progress bar - smaller height */}
       <div className="relative flex items-center h-10 rounded-[16px] w-full bg-[#C8C8C833] mb-1 sm:mb-2">
         <div
@@ -134,14 +134,12 @@ function Work() {
               />
             </div>
             {pickedIndex !== "default" && (
-              <p className="text-center text-[#C8C8C8] pt-1 text-xs sm:text-sm font-medium truncate">
+              <p className="text-center text-[#C8C8C8] pt-4 text-xs sm:text-sm font-medium truncate">
                 {currentQuestion?.desc}
               </p>
             )}
           </div>
         ) : null}
-
-        {pickedIndex === "default" && <div className="w-1/2 h-[1px] sm:h-full bg-gray-200 sm:w-0.5"></div>}
 
         {pickedIndex === 1 || pickedIndex === "default" ? (
           <div className={`w-full flex flex-col `}>
@@ -155,7 +153,7 @@ function Work() {
               />
             </div>
             {pickedIndex !== "default" && (
-              <p className="text-center text-[#C8C8C8] pt-1 text-xs sm:text-sm font-medium truncate">
+              <p className="text-center text-[#C8C8C8] pt-4 text-xs sm:text-sm font-medium truncate">
                 {currentQuestion?.desc}
               </p>
             )}
